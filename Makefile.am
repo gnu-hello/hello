@@ -48,9 +48,6 @@ hello_LDADD = lib/lib$(PACKAGE).a \
 	$(MBRTOWC_LIB) \
 	$(SETLOCALE_NULL_LIB)
 
-localedir = $(datadir)/locale
-DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
-
 CLEANFILES =
 MAINTAINERCLEANFILES =
 
