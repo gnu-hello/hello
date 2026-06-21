@@ -32,7 +32,6 @@
 #include "propername.h"
 #include "quote.h"
 #include "version-etc.h"
-#include "xalloc.h"
 
 /* The official name of this program (e.g., no 'g' prefix).  */
 #define PROGRAM_NAME "hello"
@@ -150,16 +149,14 @@ main (int argc, char *argv[])
 
   parse_options (argc, argv, &greeting_msg);
 
-  size_t len = strlen (greeting_msg) + 1;
-  wchar_t *mb_greeting = xnmalloc (len, sizeof *mb_greeting);
   mbstate_t mbstate; mbszero (&mbstate);
-  len = mbsrtowcs (mb_greeting, &greeting_msg, len, &mbstate);
+  size_t len = mbsrtowcs (NULL, &greeting_msg, strlen (greeting_msg) + 1,
+                          &mbstate);
   if (len == (size_t) -1)
     error (EXIT_FAILURE, errno, _("conversion to a multibyte string failed"));
 
-  /* Print greeting message and exit. */
-  wprintf (L"%ls\n", mb_greeting);
-  free (mb_greeting);
+  /* Print greeting message and exit.  */
+  puts (greeting_msg);
 
   exit (EXIT_SUCCESS);
 }
