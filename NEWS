@@ -9,6 +9,8 @@ hello now quote user supplied arguments in error strings, which avoids
 confusing error messages in the presence of whitespace, control
 characters, etc.
 
+hello now uses unlocked stdio functions on platforms that provide them.
+
 * Noteworthy changes in release 2.12.3 (2026-03-17) [stable]
 
 The manual no longer mentions the -h and -v short options which were

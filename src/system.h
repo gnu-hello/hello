@@ -42,6 +42,9 @@
 /* Check for errors on write.  */
 # include "closeout.h"
 
+/* Use unlocked FILE stream functions.  */
+#include "unlocked-io.h"
+
 /* Just like strncmp, but the second argument must be a literal string
    and you don't specify the length;  that comes from the literal.  */
 #define STRNCMP_LIT(s, literal) \
