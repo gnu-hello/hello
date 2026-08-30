@@ -45,11 +45,6 @@
 /* Use unlocked FILE stream functions.  */
 #include "unlocked-io.h"
 
-/* Just like strncmp, but the second argument must be a literal string
-   and you don't specify the length;  that comes from the literal.  */
-#define STRNCMP_LIT(s, literal) \
-  strncmp (s, "" literal "", sizeof (literal) - 1)
-
 /* Use a macro rather than an inline function, as this references
    the global program_name, which causes dynamic linking issues
    in libstdbuf.so on some systems where unused functions

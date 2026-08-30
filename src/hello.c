@@ -65,18 +65,6 @@ print_help (FILE *restrict out)
   fputs (_("      --help     display this help and exit\n"), out);
   fputs (_("      --version  output version information and exit\n"), out);
   emit_bug_reporting_address ();
-  /* Don't output this redundant message for English locales.
-     Note we still output for 'C' so that it gets included in the man page.  */
-  if (lc_messages && STRNCMP_LIT (lc_messages, "en_"))
-    {
-      /* TRANSLATORS: Replace LANG_CODE in this URL with your language code
-         <https://translationproject.org/team/LANG_CODE.html> to form one of
-         the URLs at https://translationproject.org/team/.  Otherwise, replace
-         the entire URL with your translation team's email address.  */
-      fprintf (out, _("Report %s translation bugs to "
-                      "<https://translationproject.org/team/>\n"),
-               PACKAGE_NAME);
-    }
   exit (out == stderr ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 

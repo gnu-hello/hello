@@ -36,6 +36,10 @@ dnl keep everything together.
 gl_EARLY
 gl_INIT
 
+# When generating manual pages, include a "Report any translation bugs" line.
+AC_DEFINE([PACKAGE_L10N_BUGREPORT], ["https://translationproject.org/team/"],
+          [Define to the URL of your translation project.])
+
 dnl Are we building from git checked-out sources, or a tarball ?
 dnl This is used in "Makefile.am" to avoid re-generating the manpage
 dnl when building from tarballs.
@@ -51,7 +55,7 @@ dnl "cross_compiling" is set by AC_PROG_CC).
 AS_IF([test $cross_compiling = no], [
   AM_MISSING_PROG([HELP2MAN], [help2man])
 ], [
-  HELP2MAN=:
+  HELP2MAN=true
 ])
 
 dnl Ensure VLAs are not used.

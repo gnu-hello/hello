@@ -58,7 +58,8 @@ endif
 
 if BUILD_FROM_GIT
 hello.1: hello$(EXEEXT)
-	$(AM_V_GEN)$(HELP2MAN) --include=$(top_srcdir)/man/hello.x \
+	$(AM_V_GEN)env IN_HELP2MAN=1 $(HELP2MAN) \
+          --include=$(top_srcdir)/man/hello.x \
 	  $(top_builddir)/hello$(EXEEXT) -o $@-t;
 	$(AM_V_at)chmod a=r $@-t
 	$(AM_V_at)mv -f $@-t $@
