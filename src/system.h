@@ -34,10 +34,18 @@
 #include <wchar.h>
 #include <wctype.h>
 
-/* Internationalization.  */
-# include "gettext.h"
-# define _(str) gettext (str)
-# define N_(str) gettext_noop (str)
+/* Take care of NLS matters.  */
+
+#include "gettext.h"
+#if ! ENABLE_NLS
+# undef textdomain
+# define textdomain(Domainname) /* empty */
+# undef bindtextdomain
+# define bindtextdomain(Domainname, Dirname) /* empty */
+#endif
+
+#define _(msgid) gettext (msgid)
+#define N_(msgid) msgid
 
 /* Check for errors on write.  */
 # include "closeout.h"
