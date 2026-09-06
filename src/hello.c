@@ -48,7 +48,6 @@
 static _Noreturn void
 print_help (FILE *restrict out)
 {
-  const char *lc_messages = setlocale (LC_MESSAGES, NULL);
   /* TRANSLATORS: --help output 1 (synopsis)
      no-wrap */
   fprintf (out, _("Usage: %s [OPTION]...\n"), program_name);
