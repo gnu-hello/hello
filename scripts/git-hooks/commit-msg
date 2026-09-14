@@ -41,7 +41,7 @@ sub re_edit($)
 
   warn "Interrupt (Ctrl-C) to abort...\n";
 
-  system 'sh', '-c', "$editor $log_file";
+  system 'sh', '-c', "$editor $log_file </dev/tty >/dev/tty 2>&1";
   ($? & 127) || ($? >> 8)
     and die "$ME: $log_file: the editor ($editor) failed, aborting\n";
 }
@@ -79,7 +79,7 @@ sub check_msg($$)
   my ($log_file, $line_ref) = @_;
 
   local *LOG;
-  open LOG, '<', $log_file
+  open LOG, '<:utf8', $log_file
     or return "failed to open for reading: $!";
   @$line_ref = <LOG>;
   close LOG;
@@ -109,10 +109,13 @@ sub check_msg($$)
     and return 'second line must be empty';
 
   # Limit line length to allow for the ChangeLog's leading TAB.
+  my $max_len = 72;
   foreach my $line (@line)
     {
-      72 < length $line && $line =~ /^[^#]/
-	and return 'line longer than 72';
+      last if $line =~ '.*-{24} >8 -{24}$';
+      my $len = length $line;
+      $max_len < $len && $line =~ /^[^#]/
+        and return "line length ($len) greater than than max: $max_len";
     }
 
   my $buf = join ("\n", @line) . "\n";
@@ -120,10 +123,16 @@ sub check_msg($$)
     and return "use shorter https://bugzilla.redhat.com/$1";
 
   $buf =~ m!https?://debbugs\.gnu\.org/(?:cgi/bugreport\.cgi\?bug=)?(\d+)!s
-    and return "use shorter https://debbugs.gnu.org/$1";
+    and return "use shorter https://bugs.gnu.org/$1";
 
-  $buf =~ /^ *Signed-off-by:/mi
-    and return q(do not use "Signed-off-by:");
+  $buf =~ m!https://lists\.gnu\.org/archive/html/!s
+    and return "use '/r/' in place of '/archive/html/' in lists.gnu.org URLs";
+
+  $buf =~ m!https?://(?:.*\.)?sourceware\.org/bugzilla/show_bug\.cgi\?id=(\d+)!s
+    and return "use shorter https://sourceware.org/PR$1";
+
+  $buf =~ m!https?://gcc\.gnu\.org/bugzilla/show_bug\.cgi\?id=(\d+)!s
+    and return "use shorter https://gcc.gnu.org/PR$1";
 
   return '';
 }
@@ -139,8 +148,9 @@ sub check_msg($$)
       my @line;
       my $err = check_msg $log_file, \@line;
       $err eq ''
-	and last;
+        and last;
       $err = "$ME: $err\n";
+      -t STDOUT or die $err;
       warn $err;
       # Insert the diagnostic as a comment on the first line of $log_file.
       rewrite $log_file, $err, \@line;
@@ -148,6 +158,6 @@ sub check_msg($$)
 
       # Stop if our parent is killed.
       getppid() == 1
-	and last;
+        and last;
     }
 }
