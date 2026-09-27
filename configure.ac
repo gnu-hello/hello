@@ -17,7 +17,7 @@ AC_INIT([GNU Hello],
 
 dnl Must come before AM_INIT_AUTOMAKE.
 AC_CONFIG_AUX_DIR([build-aux])
-AM_INIT_AUTOMAKE([1.11.1 readme-alpha subdir-objects])
+AM_INIT_AUTOMAKE([1.11.1 dist-xz readme-alpha subdir-objects])
 
 dnl Minimum Autoconf version required.
 AC_PREREQ([2.64])

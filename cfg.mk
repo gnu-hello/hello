@@ -23,6 +23,17 @@ manual_title = GNU Hello
 # which is useful for investigating failures.
 export VERBOSE = yes
 
+# Larger values for the compression level don't seem to help GNU Hello.
+# Tested with:
+# for e in '' '-e'; do
+#   for l in $(seq 0 9); do
+#     echo == $e -$l ==;
+#     env time -f 'elapsed=%E CPU=%Us Mem=%MKB' \
+#       xz -c $e -$l < hello-2.12.3.tar | wc -c;
+#   done;
+# done
+export XZ_OPT = -6e
+
 # Write cksum supported checksums into the announcement.
 # I.e., base64 to reduce space, and possibly tagged to ease usage.
 announce_gen_args = --cksum-checksums
